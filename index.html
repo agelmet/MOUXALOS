@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -32,7 +32,7 @@
       },
     };
   </script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   <style>
     :root { --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1); --ease-wipe: cubic-bezier(0.77, 0, 0.175, 1); }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -120,8 +120,8 @@
     .faq-a { font-family: 'DM Sans', sans-serif; color: rgba(24,56,51,0.7); line-height: 1.7; }
     .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
-    #mobileMenu { opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
-    #mobileMenu.menu-open { opacity: 1; visibility: visible; }
+    #mobileMenu { opacity: 0 !important; visibility: hidden !important; pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s ease; }
+    #mobileMenu.menu-open { opacity: 1 !important; visibility: visible !important; pointer-events: all; }
     @keyframes breathe { 0%,100% { box-shadow: 0 0 30px rgba(122,136,115,0.2); } 50% { box-shadow: 0 0 50px rgba(122,136,115,0.4); } }
     .cta-breathe { animation: breathe 4s ease-in-out infinite; }
     .back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px; border-radius: 50%; background: #183833; color: #fff8f1; display: flex; align-items: center; justify-content: center; z-index: 9990; opacity: 0; transform: translateY(20px); transition: opacity 0.4s, transform 0.4s var(--ease-out-expo); cursor: pointer; border: 1px solid rgba(122,136,115,0.3); box-shadow: 0 10px 30px rgba(21,52,48,0.2); }
@@ -130,9 +130,60 @@
     body > .skiptranslate { display: none !important; }
     .goog-te-banner-frame.skiptranslate { display: none !important; }
     body { top: 0 !important; }
+  
+    /* ═══ ENHANCED ANIMATIONS ═══ */
+    
+    /* Smooth parallax for hero */
+    @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 25%{transform:translate(10px,-10px)} 50%{transform:translate(-5px,15px)} 75%{transform:translate(-15px,-5px)} }
+    .orb { animation: heroFloat 20s ease-in-out infinite; }
+    
+    /* Enhanced page transition with blur */
+    .page.active { animation: pageFadeIn 0.8s var(--ease-out-expo) forwards; }
+    
+    /* Smooth hover lift for all interactive cards */
+    .bento-card, .tilt-card-inner { will-change: transform; }
+    
+    /* Enhanced CTA pulse */
+    .cta-breathe { position: relative; }
+    .cta-breathe::before { content:''; position:absolute; inset:-3px; border-radius:inherit; background:linear-gradient(135deg,rgba(122,136,115,0.4),rgba(143,158,136,0.2)); z-index:-1; opacity:0; transition:opacity 0.5s; filter:blur(12px); }
+    .cta-breathe:hover::before { opacity:1; }
+    
+    /* Smooth image loading */
+    img { transition: opacity 0.5s ease; }
+    img[loading="lazy"] { opacity:0; }
+    img[loading="lazy"].loaded, img[loading="eager"] { opacity:1; }
+    
+    /* Enhanced gallery hover */
+    #galleryGrid > div { transition: transform 0.6s var(--ease-out-expo); }
+    #galleryGrid > div:hover { z-index: 30 !important; }
+    
+    /* Better focus styles for accessibility */
+    a:focus-visible, button:focus-visible { outline: 2px solid #7a8873; outline-offset: 3px; border-radius: 4px; }
+    
+    /* Smooth scroll indicator pulse */
+    @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+    .animate-float span { animation: scrollPulse 2s ease-in-out infinite; }
+    
+    /* Hero text shadow for better readability */
+    .text-mask span { text-shadow: 0 2px 40px rgba(0,0,0,0.3); }
+    
+    /* Enhanced section transitions */
+    .section-divider { transition: opacity 0.5s; }
+    .section-divider::after { transition: transform 0.8s var(--ease-out-expo); }
+    .section-divider:hover::after { transform: translate(-50%,-50%) rotate(225deg) scale(1.3); }
+    
+    /* Preloader */
+    #preloader { position:fixed; inset:0; z-index:100000; background:#fff8f1; display:flex; align-items:center; justify-content:center; transition:opacity 0.6s ease, visibility 0.6s ease; }
+    #preloader.loaded { opacity:0; visibility:hidden; pointer-events:none; }
+    @keyframes loaderSpin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+    .loader-ring { width:48px; height:48px; border:3px solid rgba(122,136,115,0.15); border-top-color:#7a8873; border-radius:50%; animation:loaderSpin 0.8s linear infinite; }
+
   </style>
 </head>
 <body class="grain">
+  <!-- Preloader -->
+  <div id="preloader"><div class="loader-ring"></div></div>
+
   <div id="google_translate_element" style="display:none;"></div>
   <div id="pageWipe"></div>
   <div id="lightbox" class="lightbox" onclick="closeLightbox()">
@@ -1240,6 +1291,16 @@
       else { document.getElementById('page-home').classList.add('active'); currentPage = 'home'; }
       updateNavState();
       setTimeout(reinitPage, 300);
+      // Dismiss preloader
+      setTimeout(() => { 
+        const pl = document.getElementById('preloader');
+        if(pl) pl.classList.add('loaded');
+      }, 600);
+      // Lazy image fade-in
+      document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+        if(img.complete) img.classList.add('loaded');
+        else img.addEventListener('load', () => img.classList.add('loaded'));
+      });
     });
     
     window.addEventListener('popstate', () => {
@@ -1315,19 +1376,108 @@
     // Close lightbox on Escape
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-    /* ── Language Toggle (kept from original) ── */
+    /* ── Custom Native Translation System ── */
     let currentLang = 'el';
+    const originalTexts = new Map();
+    const dict = {
+      'ΑΡΧΙΚΗ':'HOME','ΥΠΗΡΕΣΙΕΣ':'SERVICES','Η ΟΜΑΔΑ ΜΑΣ':'OUR TEAM','ΤΟ ΚΕΝΤΡΟ':'THE CENTER',
+      'ΕΠΙΚΟΙΝΩΝΙΑ':'CONTACT','ΚΛΕΙΣΤΕ ΣΥΝΕΔΡΙΑ':'BOOK A SESSION','ΠΕΡΙΣΣΟΤΕΡΑ':'MORE',
+      'ΜΑΘΕΤΕ ΠΕΡΙΣΣΟΤΕΡΑ':'LEARN MORE','ΠΛΗΡΕΣ ΒΙΟΓΡΑΦΙΚΟ':'FULL BIO',
+      'ΟΛΕΣ ΟΙ ΥΠΗΡΕΣΙΕΣ':'ALL SERVICES','ΟΛΗ Η ΟΜΑΔΑ':'FULL TEAM','SCROLL':'SCROLL',
+      'Ψ-PSY ΙΝΣΤΙΤΟΥΤΟ':'Ψ-PSY INSTITUTE',
+      'Η εξέλιξή σας':'Your Evolution','ξεκινά':'Starts','εδώ.':'Here.',
+      'Μετατρέψτε τις προκλήσεις της ζωής σε αφετηρία για μια νέα ισορροπία. Στο Ψ-PSY, συνδυάζουμε 18 χρόνια εμπειρίας με μια βαθιά ανθρωποκεντρική προσέγγιση για να σας στηρίξουμε σε κάθε σας μετάβαση.':'Turn life\'s challenges into a starting point for a new balance. At Ψ-PSY, we combine 18 years of experience with a deeply person-centered approach to support you in every transition.',
+      'ΧΡΟΝΙΑ ΕΜΠΕΙΡΙΑΣ':'YEARS OF EXPERIENCE','ΕΠΑΓΓΕΛΜΑΤΙΕΣ':'PROFESSIONALS',
+      'ΩΡΕΣ ΣΥΝΕΔΡΙΩΝ':'SESSION HOURS','ΣΥΓΧΡΟΝΟΣ ΧΩΡΟΣ':'MODERN SPACE',
+      'Καλώς ήρθατε στο':'Welcome to','Ψ-PSY.':'Ψ-PSY.',
+      'ΠΡΟΣΕΓΓΙΣΗ':'APPROACH','Οι Υπηρεσίες μας':'Our Services',
+      'Ατομική Ψυχοθεραπεία':'Individual Psychotherapy','Ομαδική Ψυχοθεραπεία':'Group Psychotherapy',
+      'Θεραπεία Ζεύγους':'Couples Therapy','Οικογενειακή Θεραπεία':'Family Therapy',
+      'Online Θεραπεία':'Online Therapy','Η Ομάδα μας':'Our Team',
+      'Είστε έτοιμοι να κάνετε':'Are you ready to take','το πρώτο βήμα;':'the first step?',
+      'Επικοινωνήστε μαζί μας σήμερα για να κλείσετε μια συνεδρία ή να μάθετε περισσότερα για τις υπηρεσίες μας.':'Contact us today to book a session or learn more about our services.',
+      'ΠΡΟΣΕΓΓΙΣΕΙΣ':'APPROACHES','ΠΕΡΙΒΑΛΛΟΝ':'ENVIRONMENT','Ο Χώρος':'The Space',
+      'ΠΕΡΙΒΑΛΛΟΝ & ΦΙΛΟΣΟΦΙΑ':'ENVIRONMENT & PHILOSOPHY','Το Κέντρο':'The Center',
+      'Η Αποστολή μας':'Our Mission','ΟΙ ΑΡΧΕΣ ΜΑΣ':'OUR PRINCIPLES','Οι Αξίες μας':'Our Values',
+      'Ασφάλεια':'Safety','Επιστημονική Τεκμηρίωση':'Evidence-Based Practice',
+      'Ανθρωποκεντρικότητα':'Person-Centeredness','Ανάπτυξη':'Growth',
+      'ΑΙΣΘΗΤΙΚΗ & ΓΑΛΗΝΗ':'AESTHETICS & SERENITY',
+      'ΑΣ ΜΙΛΗΣΟΥΜΕ':'LET\'S TALK','Επικοινωνία':'Contact',
+      'Στοιχεία Επικοινωνίας':'Contact Details','ΔΙΕΥΘΥΝΣΗ':'ADDRESS',
+      'ΤΗΛΕΦΩΝΟ':'PHONE','ΩΡΑΡΙΟ':'HOURS','ΕΞΕΙΔΙΚΕΥΣΗ':'SPECIALIZATION',
+      'ΓΡΗΓΟΡΟΙ ΣΥΝΔΕΣΜΟΙ':'QUICK LINKS',
+      'Κωνσταντίνος Δ. Μούχαλος':'Konstantinos D. Mouchalos',
+      'Γιώργος Μισαηλίδης':'Giorgos Misailidis',
+      'Καλλιόπη Μαυρέα, MSc, PhD':'Kalliopi Mavrea, MSc, PhD',
+      'Όλγα Κοντράσκινα':'Olga Kontraskina','Σταυρούλα Τσιώρου':'Stavroula Tsiorou',
+      'Τζωρτζίνα Σπέντζου':'Georgina Spentzou','Βιργινία Καραβάκου':'Virginia Karavakou',
+      'Αλεξάνδρα Κορδόση':'Alexandra Kordosi','Βασίλης Κομνηνός':'Vasilis Komninos',
+      'Μαρίνα Σιταρένιου':'Marina Sitareniou',
+      'ΙΔΡΥΤΗΣ & ΔΙΕΥΘΥΝΤΗΣ Ψ-PSY':'FOUNDER & DIRECTOR Ψ-PSY',
+      'ΨΥΧΟΘΕΡΑΠΕΥΤΗΣ & ΕΚΠΑΙΔΕΥΤΙΚΟΣ':'PSYCHOTHERAPIST & EDUCATOR',
+      'ΕΚΠΑΙΔΕΥΤΙΚΟΣ ΕΙΔΙΚΗΣ ΑΓΩΓΗΣ':'SPECIAL EDUCATION TEACHER',
+      'ΣΥΜΒΟΥΛΟΣ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ':'MENTAL HEALTH COUNSELOR',
+      'ΨΥΧΟΛΟΓΟΣ & ΟΙΚΟΓΕΝΕΙΑΚΗ ΘΕΡΑΠΕΥΤΡΙΑ':'PSYCHOLOGIST & FAMILY THERAPIST',
+      'ΨΥΧΟΛΟΓΟΣ & ΕΙΔΙΚΕΥΟΜΕΝΗ ΨΥΧΟΘΕΡΑΠΕΥΤΡΙΑ':'PSYCHOLOGIST & PSYCHOTHERAPIST IN TRAINING',
+      'ΨΥΧΟΛΟΓΟΣ & EXECUTIVE COACH':'PSYCHOLOGIST & EXECUTIVE COACH',
+      'ΣΥΜΒΟΥΛΟΣ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ & COACH':'MENTAL HEALTH COUNSELOR & COACH',
+      'ΣΥΜΒΟΥΛΕΥΤΙΚΗ ΨΥΧΟΛΟΓΟΣ & ΟΜΑΔΙΚΗ ΨΥΧΟΘΕΡΑΠΕΥΤΡΙΑ':'COUNSELING PSYCHOLOGIST & GROUP PSYCHOTHERAPIST',
+      'ΨΥΧΟΛΟΓΟΣ - ΨΥΧΟΘΕΡΑΠΕΥΤΗΣ':'PSYCHOLOGIST - PSYCHOTHERAPIST',
+      '10 εξειδικευμένοι επαγγελματίες, αφοσιωμένοι στην ψυχική σας υγεία.':'10 specialized professionals, dedicated to your mental health.',
+      'Επιστημονικά τεκμηριωμένες προσεγγίσεις, σχεδιασμένες για τις ανάγκες σας.':'Evidence-based approaches, designed for your needs.',
+      'Είμαστε εδώ για εσάς. Κλείστε μια συνεδρία ή ρωτήστε μας ό,τι σας απασχολεί.':'We are here for you. Book a session or ask us anything on your mind.',
+      'Ένας σύγχρονος, ζεστός χώρος σχεδιασμένος για την ψυχική σας ευεξία.':'A modern, warm space designed for your mental well-being.',
+      'Δευτέρα – Παρασκευή: 09:00 – 21:00':'Monday – Friday: 09:00 – 21:00',
+      'Σάββατο: Κατόπιν ραντεβού':'Saturday: By appointment',
+      'Σε ποιους απευθύνεται;':'Who is it for?','Συχνές Ερωτήσεις':'Frequently Asked Questions',
+      'Λεωφόρος Δημάρχου Αγγέλου Μεταξά 30':'30 Dimarchou Angelou Metaxa Avenue',
+      'Γλυφάδα, 16674, Ελλάδα':'Glyfada, 16674, Greece',
+      'Λ. Δημ. Αγγ. Μεταξά 30,':'30 Dim. Ang. Metaxa Ave.,',
+      'Γλυφάδα 16674':'Glyfada 16674',
+      'Ινστιτούτο Ψυχικής Υγείας και Ψυχοθεραπείας. Ένας ασφαλής, διεπιστημονικός χώρος αφιερωμένος στην ψυχική σας υγεία.':'Institute of Mental Health and Psychotherapy. A safe, interdisciplinary space dedicated to your mental health.',
+      '© 2026 Ψ-PSY ΙΝΣΤΙΤΟΥΤΟ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ ΚΑΙ ΨΥΧΟΘΕΡΑΠΕΙΑΣ.':'© 2026 Ψ-PSY INSTITUTE OF MENTAL HEALTH AND PSYCHOTHERAPY.',
+      'ΜΕ ΕΠΙΦΥΛΑΞΗ ΠΑΝΤΟΣ ΔΙΚΑΙΩΜΑΤΟΣ.':'ALL RIGHTS RESERVED.',
+      'Ένα περιβάλλον εμπιστοσύνης και σεβασμού, όπου κάθε εμπειρία ακούγεται χωρίς κρίση.':'An environment of trust and respect, where every experience is heard without judgment.',
+      'Κάθε παρέμβαση βασίζεται σε αποδεδειγμένες θεραπευτικές μεθόδους.':'Every intervention is based on proven therapeutic methods.',
+      'Το άτομο είναι πάντα στο κέντρο — με τις μοναδικές ανάγκες και τη δική του ιστορία.':'The individual is always at the center — with their unique needs and their own story.',
+      'Πιστεύουμε στη δυνατότητα κάθε ανθρώπου να αλλάξει, να αναπτυχθεί και να ανθίσει.':'We believe in every person\'s potential to change, grow, and flourish.',
+      'Ένας σύγχρονος, φιλόξενος χώρος σχεδιασμένος για να αισθάνεστε άνετα και ασφαλείς.':'A modern, welcoming space designed to make you feel comfortable and safe.',
+      'Η ΔΙΑΔΡΟΜΗ ΠΡΟΣ ΤΗΝ ΠΡΟΣΩΠΙΚΗ ΣΑΣ ΙΣΟΡΡΟΠΙΑ':'THE PATH TO YOUR PERSONAL BALANCE',
+      'Η ΔΥΝΑΜΗ ΤΟΥ "ΜΑΖΙ" ΣΤΗΝ ΕΠΟΥΛΩΣΗ':'THE POWER OF "TOGETHER" IN HEALING',
+      'ΧΤΙΖΟΝΤΑΣ ΞΑΝΑ ΤΙΣ ΓΕΦΥΡΕΣ ΕΠΙΚΟΙΝΩΝΙΑΣ':'REBUILDING THE BRIDGES OF COMMUNICATION',
+      'ΑΠΟΚΑΘΙΣΤΩΝΤΑΣ ΤΗΝ ΑΡΜΟΝΙΑ ΣΤΟ ΣΠΙΤΙ':'RESTORING HARMONY AT HOME',
+      'Η ΘΕΡΑΠΕΥΤΙΚΗ ΥΠΟΣΤΗΡΙΞΗ, ΟΠΟΥ ΚΙ ΑΝ ΒΡΙΣΚΕΣΤΕ':'THERAPEUTIC SUPPORT, WHEREVER YOU ARE',
+    };
+    const sortedKeys = Object.keys(dict).sort((a,b) => b.length - a.length);
+    function walkTextNodes(root, cb) {
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+      const nodes = [];
+      while (w.nextNode()) nodes.push(w.currentNode);
+      nodes.forEach(cb);
+    }
+    function translateToEnglish() {
+      walkTextNodes(document.body, (node) => {
+        const text = node.textContent;
+        if (!text.trim()) return;
+        if (node.parentElement && (node.parentElement.tagName==='SCRIPT'||node.parentElement.tagName==='STYLE')) return;
+        if (!originalTexts.has(node)) originalTexts.set(node, text);
+        let newText = text;
+        for (const key of sortedKeys) {
+          if (newText.includes(key)) newText = newText.split(key).join(dict[key]);
+        }
+        if (newText !== text) node.textContent = newText;
+      });
+    }
+    function restoreGreek() {
+      originalTexts.forEach((original, node) => { if (node.parentNode) node.textContent = original; });
+      originalTexts.clear();
+    }
     function toggleLanguage() {
-      // Simple language toggle - uses Google Translate element if available
-      // or provides basic visual feedback
-      if (currentLang === 'el') {
-        currentLang = 'en';
-      } else {
-        currentLang = 'el';
-      }
-      const newText = currentLang === 'el' ? 'EN' : 'EL';
-      document.getElementById('langToggleBtnDesktop').innerText = newText;
-      document.getElementById('langToggleBtnMobile').innerText = newText;
+      if (currentLang === 'el') { currentLang = 'en'; translateToEnglish(); }
+      else { currentLang = 'el'; restoreGreek(); }
+      const t = currentLang === 'el' ? 'EN' : 'EL';
+      document.getElementById('langToggleBtnDesktop').innerText = t;
+      document.getElementById('langToggleBtnMobile').innerText = t;
     }
   </script>
 </body>
